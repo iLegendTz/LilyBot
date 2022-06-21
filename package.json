@@ -9,6 +9,7 @@
   "author": "iLegendTz",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/builders": "^0.15.0",
     "discord.js": "^13.8.0",
     "dotenv": "^16.0.1",
     "eslint": "^8.18.0"
