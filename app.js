@@ -3,6 +3,7 @@ const path = require('path');
 
 // Require the necessary discord.js classes
 const { Client, Intents, Collection } = require('discord.js');
+
 require('dotenv').config();
 
 const discordToken = process.env.DISCORD_TOKEN;
@@ -11,8 +12,13 @@ const prefix = '>';
 
 // Create a new client instance
 const client = new Client({
-  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+  ],
 });
+
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs
@@ -24,7 +30,7 @@ for (const file of commandFiles) {
   const command = require(filePath);
   // Set a new item in the Collection
   // With the key as the command name and the value as the exported module
-  client.commands.set(command.data.name, command);
+  client.commands.set(command.name, command);
 }
 
 client.on('messageCreate', async (message) => {
@@ -40,6 +46,7 @@ client.on('messageCreate', async (message) => {
     await command.execute(message, args);
   } catch (error) {
     await message.reply('There was an error trying to execute that command!');
+    console.error(`Error: ${error.message}`);
   }
 });
 
